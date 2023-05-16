@@ -38,6 +38,48 @@ def get_character():
     return jsonify(response.json())
 
 
+@app.route('/comics')  # création route
+def get_comics():
+    """route pour récupération comics"""
+    ts, hash = ts_hash_gen().values()
+    params = {  # ajout des paramètres de la requête
+        'apikey': PUBLIC_KEY,
+        'ts': ts,
+        'hash': hash,
+        'limit': 100
+    }
+    response = requests.get(f"{BASE_URL}comics", params=params)
+    return jsonify(response.json())
+
+
+@app.route('/series')  # création route
+def get_series():
+    """route pour récupération series"""
+    ts, hash = ts_hash_gen().values()
+    params = {  # ajout des paramètres de la requête
+        'apikey': PUBLIC_KEY,
+        'ts': ts,
+        'hash': hash,
+        'limit': 100
+    }
+    response = requests.get(f"{BASE_URL}series", params=params)
+    return jsonify(response.json())
+
+
+@app.route('/events')  # création route
+def get_events():
+    """route pour récupération events"""
+    ts, hash = ts_hash_gen().values()
+    params = {  # ajout des paramètres de la requête
+        'apikey': PUBLIC_KEY,
+        'ts': ts,
+        'hash': hash,
+        'limit': 100
+    }
+    response = requests.get(f"{BASE_URL}events", params=params)
+    return jsonify(response.json())
+
+
 @app.route('/characters/<int:charid>', methods=['GET'])
 def get_character_uniq(charid):
     ts, hash = ts_hash_gen().values()  # on unpack directement le dict
