@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="">
-    <div class="">
-        <div class="">
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
             <img src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}" alt="{{ character.name }}" class="img-fluid">
         </div>
-        <div class="">
+        <div class="col-md-8">
             <h1> {{ character.name }} </h1>
             <p> {{ character.description }} </p>
         </div>

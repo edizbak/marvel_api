@@ -65,7 +65,6 @@ def render_char(charid):
     }
     response = requests.get(f"{BASE_URL}characters/{charid}", params=params)
     bs_char = response.json()['data']['results'][0]
-    print(bs_char)
     return render_template('character.html', character=bs_char)
 
 
