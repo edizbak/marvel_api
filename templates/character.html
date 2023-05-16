@@ -1,0 +1,20 @@
+<!-- template de base bootstrap -->
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+{{ character.name }}
+{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class="">
+        <div class="">
+            <img src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}" alt="{{ character.name }}" class="img-fluid">
+        </div>
+        <div class="">
+            <h1> {{ character.name }} </h1>
+            <p> {{ character.description }} </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}
