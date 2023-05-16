@@ -1,11 +1,13 @@
 # flask pour API et jsonify pour... faire du json !
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import hashlib  # import hashlib pour génération hash
 import time  # génération timestamp
 import requests  # requêtage http
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)  # instanciation appli flask
 app.config.from_pyfile('config.py')  # chargement config
+Bootstrap(app)
 
 # récupération constantes
 PUBLIC_KEY = app.config['MARVEL_PUBLIC_KEY']
@@ -51,6 +53,20 @@ def ts_hash_gen():
     ts = str(time.time())
     hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY)
     return {'ts': ts, 'hash': hash}
+
+
+@app.route('/bs/<int:charid>', methods=['GET'])
+def render_char(charid):
+    ts, hash = ts_hash_gen().values()
+    params = {
+        'apikey': PUBLIC_KEY,
+        'ts': ts,
+        'hash': hash
+    }
+    response = requests.get(f"{BASE_URL}characters/{charid}", params=params)
+    bs_char = response.json()['data']['results'][0]
+    print(bs_char)
+    return render_template('character.html', character=bs_char)
 
 
 app.run(debug=True)
