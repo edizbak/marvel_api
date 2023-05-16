@@ -4,6 +4,7 @@ import hashlib  # import hashlib pour génération hash
 import time  # génération timestamp
 import requests  # requêtage http
 from flask_bootstrap import Bootstrap
+from models.character import Character
 
 app = Flask(__name__)  # instanciation appli flask
 app.config.from_pyfile('config.py')  # chargement config
@@ -64,7 +65,7 @@ def render_char(charid):
         'hash': hash
     }
     response = requests.get(f"{BASE_URL}characters/{charid}", params=params)
-    bs_char = response.json()['data']['results'][0]
+    bs_char = Character.from_dict(response.json()['data']['results'][0])
     return render_template('character.html', character=bs_char)
 
 
