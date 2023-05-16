@@ -24,8 +24,7 @@ def generate_hash(ts, private_key, public_key):
 @app.route('/characters')  # création route
 def get_character():
     """route pour récupération personnages"""
-    ts = str(time.time())  # timestamp
-    hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY)  # génération hash
+    ts, hash = ts_hash_gen().values()
     params = {  # ajout des paramètres de la requête
         'apikey': PUBLIC_KEY,
         'ts': ts,
@@ -36,10 +35,9 @@ def get_character():
     return jsonify(response.json())
 
 
-@app.route('/characters/<charid>')
+@app.route('/characters/<int:charid>', methods=['GET'])
 def get_character_uniq(charid):
-    ts = str(time.time())
-    hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY)
+    ts, hash = ts_hash_gen().values()  # on unpack directement le dict
     params = {
         'apikey': PUBLIC_KEY,
         'ts': ts,
@@ -47,6 +45,12 @@ def get_character_uniq(charid):
     }
     response = requests.get(f"{BASE_URL}characters/{charid}", params=params)
     return jsonify(response.json())
+
+
+def ts_hash_gen():
+    ts = str(time.time())
+    hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY)
+    return {'ts': ts, 'hash': hash}
 
 
 app.run(debug=True)
