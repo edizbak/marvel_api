@@ -27,48 +27,29 @@ def generate_hash(ts, private_key, public_key):
 @app.route('/characters')  # création route
 def get_character():
     """route pour récupération personnages"""
-    ts, hash = ts_hash_gen().values()
-    params = {  # ajout des paramètres de la requête
-        'apikey': PUBLIC_KEY,
-        'ts': ts,
-        'hash': hash,
-        'limit': 100
-    }
-    response = requests.get(f"{BASE_URL}characters", params=params)
-    return jsonify(response.json())
+    return get_any('characters')
 
 
 @app.route('/comics')  # création route
 def get_comics():
     """route pour récupération comics"""
-    ts, hash = ts_hash_gen().values()
-    params = {  # ajout des paramètres de la requête
-        'apikey': PUBLIC_KEY,
-        'ts': ts,
-        'hash': hash,
-        'limit': 100
-    }
-    response = requests.get(f"{BASE_URL}comics", params=params)
-    return jsonify(response.json())
+    return get_any('comics')
 
 
 @app.route('/series')  # création route
 def get_series():
     """route pour récupération series"""
-    ts, hash = ts_hash_gen().values()
-    params = {  # ajout des paramètres de la requête
-        'apikey': PUBLIC_KEY,
-        'ts': ts,
-        'hash': hash,
-        'limit': 100
-    }
-    response = requests.get(f"{BASE_URL}series", params=params)
-    return jsonify(response.json())
+    return get_any('series')
 
 
 @app.route('/events')  # création route
 def get_events():
-    """route pour récupération events"""
+    """ route events """
+    return get_any('events')
+
+
+def get_any(any):
+    """visu any route"""
     ts, hash = ts_hash_gen().values()
     params = {  # ajout des paramètres de la requête
         'apikey': PUBLIC_KEY,
@@ -76,7 +57,7 @@ def get_events():
         'hash': hash,
         'limit': 100
     }
-    response = requests.get(f"{BASE_URL}events", params=params)
+    response = requests.get(f"{BASE_URL}{any}", params=params)
     return jsonify(response.json())
 
 
@@ -109,6 +90,11 @@ def render_char(charid):
     response = requests.get(f"{BASE_URL}characters/{charid}", params=params)
     bs_char = Character.from_dict(response.json()['data']['results'][0])
     return render_template('character.html', character=bs_char)
+
+
+@app.errorhandler(500)
+def error_server():
+    return f"500 - Erreur serveur", 500
 
 
 app.run(debug=True)
